@@ -10,7 +10,25 @@
     color: blue;
 }
 
-.footer{
+.hideFooter{
     text-align: center;
     display: none;
+}
+
+.showFooter{
+    text-align: center;
+    display: block;
+}
+
+.headTable{
+    font-size: 40px;
+    color: greenyellow;
+}
+
+.firstColunm{
+    width: 50%;
+}
+
+.colunm{
+    width: 25%;
 }
