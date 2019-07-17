@@ -22,7 +22,7 @@ class Countries extends React.Component{
 
     handleClick(country){
         var continent = this.props.continent;
-       viewCities(continent,country);
+       //viewCities(continent,country);
     }
 
     render(){

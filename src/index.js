@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
 
 import './index.css';
 import Cities from './components/cityComponent/city';
 import Countries from './components/countryComponent/country';
+//import View from 'components/viewComponent/view.js'
+import Continents from './components/continentComponent/continent.js';
+import Footer from './components/footerComponent/footer.js';
 
-//=====================================================================//
+
+
 
 class View extends React.Component{
     constructor(props){
@@ -34,90 +37,30 @@ class View extends React.Component{
     }
 }
 
-//=====================================================================//
 
-/*
+ReactDOM.render(
+    <View 
+        titlePage={"CONTINENTI TERRESTRI"} 
+        callBackComponent={<Continents />}
+        cssFooter={"hideFooter"}
 
-class ViewCities extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render(){
-        return(
-            <div>
-                <div className="title">
-                    <p> CITTA DELLA NAZIONE </p>
-                </div>
-                <div className="list">
-                <Cities coutryCode = {this.props.coutryCode}/>
-                </div>
-                <br/><br/>
-                <Footer curPage = {this.props.coutryCode} bkPage={this.props.continent} route={"countries"} show={"showFooter"}
-                />
-            </div>
-        );
-    }
-}*/
+        curPage = {"index"} 
+        bkPage={null} 
+        route={null}
 
-//=====================================================================//
+    />,
+    document.getElementById('root') 
+);
 
-class Continents extends React.Component{
-    state = {
-        continents: []
-    }
 
-    componentDidMount(){
 
-        axios.get(`http://localhost:8080/continent`)
-        .then(res => {
-            const continents = res.data;
-            this.setState({ continents });
-        })
-    }
 
-    handleClick(continent){
-        viewCountries(continent);
-    }
- 
-    render(){
-        return (
-               this.state.continents.map(continent => <a key={continent} onClick={ () => this.handleClick(continent) }> {continent}<br/></a>)
-          )
-    }
-}
 
-//===================================================================//
 
-class Footer extends React.Component{
-    constructor(props){
-        super(props);
-        this.handleClick = this.handleClick.bind(this);  
-    }
 
-    handleClick(){
-        switch (this.props.route) {
-            case "continents":
-                viewContinents();
-                break;
-
-            case "countries":
-                //viewCountries(this.props.bkPage);
-            break;    
-        
-            default:
-                break;
-        }
-    }
-
-    render(){
-        return (
-		        <button type="button" id="backButton" onClick={this.handleClick}>TORNA INDIETRO</button>    
-        )
-    }
-}
 
 /*===============================*/
-viewContinents();
+/*viewContinents();
 
 function viewContinents(){
     ReactDOM.render(
@@ -165,5 +108,5 @@ function viewCities(continent,coutryCode)
         />,
         document.getElementById('root')
     );
-} 
+} */
 
