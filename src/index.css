@@ -1,3 +1,7 @@
+table{
+    width: 100%;
+}
+
 .title{
     text-align: center;
     font-size: 80px;
@@ -21,14 +25,24 @@
 }
 
 .headTable{
+    width: 50%;
     font-size: 40px;
-    color: greenyellow;
+    color: orange;
+    text-align: left;
 }
 
 .firstColunm{
     width: 50%;
+    text-align: left;
 }
 
 .colunm{
     width: 25%;
+    text-align: left;
+}
+
+button{
+    border-radius: 40px;
+    font-size: 30px;
+    background: #E0F1FF;
 }

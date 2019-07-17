@@ -1,46 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import axios from 'axios';
 
-class ViewContinents extends React.Component{
-    render(){
-        return(
-            <div>
-                <div className="title">
-                    <p> CONTINENTI TERRESTRI </p>
-                </div>
-                <div className="list">
-                <Continents />
-                </div>
-                <br/><br/>
-                <Footer curPage = {"index"} bkPage={null} show={"hideFooter"}
-                />
-            </div>
-        );
-    }
-}
+import './index.css';
+import Cities from './components/cityComponent/city';
+import Countries from './components/countryComponent/country';
 
-class ViewCountries extends React.Component{
+//=====================================================================//
+
+class View extends React.Component{
     constructor(props){
         super(props);
     }
+
     render(){
         return(
             <div>
                 <div className="title">
-                    <p> NAZIONI DEL CONTINENTE </p>
+                    <p>{this.props.titlePage}</p>
                 </div>
                 <div className="list">
-                <Countries continent = {this.props.continent}/>
+                    {this.props.callBackComponent}
+                </div><br />
+                <div className={this.props.cssFooter}>
+                    <Footer
+                        curPage = {this.props.curPage} 
+                        bkPage={this.props.bkPage} 
+                        route={this.props.route} 
+                    />
                 </div>
-                <br/><br/>
-                <Footer curPage = {this.props.continent} bkPage={"index"} show={"showFooter"}
-                />
             </div>
-        );
+        )
     }
 }
+
+//=====================================================================//
+
+/*
 
 class ViewCities extends React.Component{
     constructor(props){
@@ -56,12 +52,12 @@ class ViewCities extends React.Component{
                 <Cities coutryCode = {this.props.coutryCode}/>
                 </div>
                 <br/><br/>
-                <Footer curPage = {this.props.coutryCode} bkPage={this.props.continent} show={"showFooter"}
+                <Footer curPage = {this.props.coutryCode} bkPage={this.props.continent} route={"countries"} show={"showFooter"}
                 />
             </div>
         );
     }
-}
+}*/
 
 //=====================================================================//
 
@@ -85,110 +81,37 @@ class Continents extends React.Component{
  
     render(){
         return (
-               this.state.continents.map(continents => <a key={continents} onClick={ () => this.handleClick(continents) }> {continents}<br/></a>)
+               this.state.continents.map(continent => <a key={continent} onClick={ () => this.handleClick(continent) }> {continent}<br/></a>)
           )
     }
 }
 
-class Countries extends React.Component{
-
-    constructor(props){
-        super(props);
-        this.state = {
-            countries: []
-        }
-    }
-
-    componentDidMount(){
-
-        axios.get(`http://localhost:8080/nationjdbc?continent=`+this.props.continent)
-        .then(res => {
-            const countries = res.data;
-            this.setState({ countries });
-        })
-    }
-
-    handleClick(country){
-        var continent = this.props.continent;
-        viewCities(continent,country);
-    }
-
-    render(){
-        return (
-            this.state.countries.map(countries => <a key={countries.name} onClick={ () => this.handleClick(countries.code) }> {countries.name}<br/></a>)
-          ) 
-    }
-}
-
-class Cities extends React.Component{
-
-    constructor(props){
-        super(props);
-        this.state = {
-            cities: []
-        }
-    }
-
-    componentDidMount(){
-
-        axios.get(`http://localhost:8080/cityJdbc?nation=`+this.props.coutryCode+`&order=A-z`)
-        .then(res => {
-            const cities = res.data;
-            this.setState({ cities });
-        })
-    }
-
-    render(){
-        return (
-            <table>
-                <tr>
-                    <td>
-                        <b className="headTable">NOME CITTA<button>A-z</button></b>
-                    </td>
-                    </tr>
-                    {this.state.cities.map(cities => <tr>
-                        <td className="firstColunm">
-                            {cities.name}
-                        </td>
-                        <td className="colunm">
-                            DELETE
-                        </td>
-                        <td className="colunm">
-                            MODIFY 
-                        </td>
-                    </tr>)}    
-            </table>
-        )
-    }
-}
+//===================================================================//
 
 class Footer extends React.Component{
     constructor(props){
         super(props);
-        this.state = {
-            infoBackPage : this.props.bkPage,
-            infoCurrentPage : this.props.curPage,
-        }
+        this.handleClick = this.handleClick.bind(this);  
     }
 
-    handleClick(backPage){
-        
-        switch (backPage) {
-            case "index":
+    handleClick(){
+        switch (this.props.route) {
+            case "continents":
                 viewContinents();
                 break;
+
+            case "countries":
+                //viewCountries(this.props.bkPage);
+            break;    
         
             default:
                 break;
         }
-
     }
 
     render(){
         return (
-            <div className={this.props.show}>
-		        <button type="button" id="backButton" onClick={() => this.handleClick(this.state.infoBackPage)}>TORNA INDIETRO</button>
-            </div>    
+		        <button type="button" id="backButton" onClick={this.handleClick}>TORNA INDIETRO</button>    
         )
     }
 }
@@ -198,7 +121,15 @@ viewContinents();
 
 function viewContinents(){
     ReactDOM.render(
-        <ViewContinents />,
+        <View   
+            titlePage={"CONTINENTI TERRESTRI"} 
+            callBackComponent={<Continents />}
+            cssFooter={"hideFooter"}
+
+            curPage = {"index"} 
+            bkPage={null} 
+            route={null}
+        />,
         document.getElementById('root')
       );    
 }
@@ -207,7 +138,15 @@ function viewContinents(){
 function viewCountries(continent)
 {
     ReactDOM.render(
-        <ViewCountries  continent = {continent} />,
+        <View
+            titlePage={"NAZIONI DEL CONTINENTE"} 
+            callBackComponent={<Countries continent = {continent} />}
+            cssFooter={"showFooter"}
+
+            curPage = {continent} 
+            bkPage={null} 
+            route={"continents"}
+        />,
         document.getElementById('root')
     );
 }
@@ -215,7 +154,15 @@ function viewCountries(continent)
 function viewCities(continent,coutryCode)
 {
     ReactDOM.render(
-        <ViewCities  continent = {continent}  coutryCode = {coutryCode} />,
+        <View   
+            titlePage={"NAZIONI DEL CONTINENTE"} 
+            callBackComponent={<Cities continent = {continent}  coutryCode = {coutryCode} />}
+            cssFooter={"showFooter"}
+
+            curPage = {continent} 
+            bkPage={null} 
+            route={"continents"}
+        />,
         document.getElementById('root')
     );
 } 
